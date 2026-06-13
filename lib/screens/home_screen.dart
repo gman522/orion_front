@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        backgroundColor: AppColors.azul,
         title: const Text('ORION'),
       ),
 

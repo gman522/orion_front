@@ -3,19 +3,19 @@ import 'app_colors.dart';
 
 class AppTheme{
     static ThemeData lightTheme =ThemeData(
-        scaffoldBackgroundColor: colors.white,
+        scaffoldBackgroundColor: Colors.white,
 
-        appBarTheme: const appBarTheme(
-            foregroundColor: AppColors.azul,
+        appBarTheme: const AppBarTheme(
+            backgroundColor: AppColors.azul,
             foregroundColor: Colors.white,
             centerTitle: true,
         ),
 
         elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleForm(
+            style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.azul,
                 foregroundColor: Colors.white,
-                shape: RoundedRegtangleBorder(
+                shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                 ),
             ),

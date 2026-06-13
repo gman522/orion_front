@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../widgets/categoria_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,6 +11,9 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
+        backgroundColor: AppColors.azul,
+        foregroundColor: Colors.white,
+        centerTitle: true,
         title: const Text('ORION'),
       ),
 
@@ -67,33 +71,27 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildButton('SALUD', AppColors.verde),
+            CategoriaCard(
+              titulo: "SALUD",
+              color: AppColors.verde,
+              icono: Icons.favorite,
+              onTap: () {},
+            ),
             const SizedBox(height: 20),
-            _buildButton('INFRAESTRUCTURA', AppColors.amarillo),
+            CategoriaCard(
+              titulo: "INFRAESTRUCTURA",
+              color: AppColors.amarillo,
+              icono: Icons.build,
+              onTap: () {},
+            ),
             const SizedBox(height: 20),
-            _buildButton('SEGURIDAD', AppColors.rojo),
+            CategoriaCard(
+              titulo: "SEGURIDAD",
+              color: AppColors.rojo,
+              icono: Icons.security,
+              onTap: () {},
+            ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(String text, Color color) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
         ),
       ),
     );

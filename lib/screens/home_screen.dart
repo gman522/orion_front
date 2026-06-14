@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../widgets/categoria_card.dart';
+import 'subcategoria_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -75,21 +76,45 @@ class HomeScreen extends StatelessWidget {
               titulo: "SALUD",
               color: AppColors.verde,
               icono: Icons.favorite,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      const SubcategoriaScreen(categoria: "SALUD"),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             CategoriaCard(
               titulo: "INFRAESTRUCTURA",
               color: AppColors.amarillo,
               icono: Icons.build,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      const SubcategoriaScreen(categoria: "INFRAESTRUCTURA"),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             CategoriaCard(
               titulo: "SEGURIDAD",
               color: AppColors.rojo,
               icono: Icons.security,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                      const SubcategoriaScreen(categoria: "SEGURIDAD"),
+                  ),
+                );
+              },
             ),
           ],
         ),

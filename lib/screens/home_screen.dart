@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
 import '../widgets/categoria_card.dart';
 import 'subcategoria_screen.dart';
@@ -77,13 +78,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.verde,
               icono: Icons.favorite,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                      const SubcategoriaScreen(categoria: "SALUD"),
-                  ),
-                );
+                context.go('/subcategoria/SALUD');
               },
             ),
             const SizedBox(height: 20),
@@ -92,13 +87,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.amarillo,
               icono: Icons.build,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                      const SubcategoriaScreen(categoria: "INFRAESTRUCTURA"),
-                  ),
-                );
+                context.go('/subcategoria/INFRAESTRUCTURA');
               },
             ),
             const SizedBox(height: 20),
@@ -107,13 +96,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.rojo,
               icono: Icons.security,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                      const SubcategoriaScreen(categoria: "SEGURIDAD"),
-                  ),
-                );
+                context.go('/subcategoria/SEGURIDAD');
               },
             ),
           ],

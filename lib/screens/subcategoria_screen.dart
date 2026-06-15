@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../data/subcategorias_data.dart';
 import '../theme/app_colors.dart';
 
@@ -27,6 +28,13 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                 appBar: AppBar(
                     backgroundColor: AppColors.azul,
                     foregroundColor: Colors.white,
+
+                    leading: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: (){
+                            context.go('/home');
+                        },
+                    ),
                     title: Text(widget.categoria),
                 ),
 

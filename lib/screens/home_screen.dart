@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
 import '../widgets/categoria_card.dart';
+import '../constants/app_strings.dart';
 import 'subcategoria_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: AppColors.azul,
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text('ORION'),
+        title: const Text(AppStrings.appName),
       ),
 
       drawer: Drawer(
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               ),
 
               child: Text(
-                "MENU",
+                AppStrings.menuTitle,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -41,7 +42,7 @@ class HomeScreen extends StatelessWidget {
 
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text("inicio"),
+              title: const Text(AppStrings.home),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
 
             ListTile(
               leading: const Icon(Icons.history),
-              title: const Text("historial (desarrollo)"),
+              title: const Text(AppStrings.history),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -57,7 +58,7 @@ class HomeScreen extends StatelessWidget {
 
             ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text("configuracion (desarrollo)"),
+              title: const Text(AppStrings.settings),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CategoriaCard(
-              titulo: "SALUD",
+              titulo: AppStrings.health,
               color: AppColors.verde,
               icono: Icons.favorite,
               onTap: () {
@@ -83,7 +84,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CategoriaCard(
-              titulo: "INFRAESTRUCTURA",
+              titulo: AppStrings.infraestructure,
               color: AppColors.amarillo,
               icono: Icons.build,
               onTap: () {
@@ -92,7 +93,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CategoriaCard(
-              titulo: "SEGURIDAD",
+              titulo: AppStrings.security,
               color: AppColors.rojo,
               icono: Icons.security,
               onTap: () {

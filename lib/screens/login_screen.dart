@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
+import '../constants/app_strings.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class LoginScreen extends StatelessWidget {
           children: [
 
             const Text(
-              'ORION',
+              AppStrings.appName,
               style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
@@ -42,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Entrar',
+                AppStrings.loginButton,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

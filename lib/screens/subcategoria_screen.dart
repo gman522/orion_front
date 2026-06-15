@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../data/subcategorias_data.dart';
+import '../constants/app_strings.dart';
 import '../theme/app_colors.dart';
 
 class SubcategoriaScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                         children:[
 
                             const Text(
-                                "Selecciona el tipo de incidente",
+                                AppStrings.selectIncident,
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.azul,
                                     ),
-                                    child: const Text("Enviar alerta"),
+                                    child: const Text(AppStrings.sendAlert),
                                 ),
                             ),
                         ],

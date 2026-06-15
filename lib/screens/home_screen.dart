@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/reporte_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/categoria_card.dart';
 import '../constants/app_strings.dart';
-import 'subcategoria_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -79,7 +80,9 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.verde,
               icono: Icons.favorite,
               onTap: () {
-                context.go('/subcategoria/SALUD');
+                ref.read(categoriaProvider.notifier).state = "SALUD";
+
+                context.go('/subcategoria');
               },
             ),
             const SizedBox(height: 20),
@@ -88,7 +91,9 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.amarillo,
               icono: Icons.build,
               onTap: () {
-                context.go('/subcategoria/INFRAESTRUCTURA');
+                ref.read(categoriaProvider.notifier).state = "INFRAESTRUCTURA";
+
+                context.go('/subcategoria');
               },
             ),
             const SizedBox(height: 20),
@@ -97,7 +102,9 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.rojo,
               icono: Icons.security,
               onTap: () {
-                context.go('/subcategoria/SEGURIDAD');
+                ref.read(categoriaProvider.notifier).state = "SEGURIDAD";
+
+                context.go('/subcategoria');
               },
             ),
           ],

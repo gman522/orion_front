@@ -1,5 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final categoriaProvider = StateProvider<String?>(
-    (ref) => null,
-);
+part 'reporte_provider.g.dart';
+
+@riverpod
+class Categoria extends _$Categoria {
+  @override
+  String? build() => null;
+
+  void setCategoria(String value) {
+    state = value;
+  }
+}

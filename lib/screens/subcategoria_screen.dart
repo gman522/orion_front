@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/reporte_provider.dart';
 import '../data/subcategorias_data.dart';
 import '../constants/app_strings.dart';
 import '../theme/app_colors.dart';
 
-class SubcategoriaScreen extends StatefulWidget {
+class SubcategoriaScreen extends ConsumerStatefulWidget {
     final String categoria;
 
-    const SubcategoriaScreen({
-        super.key,
-        required this.categoria,
-    });
+    const SubcategoriaScreen({super.key, required this.categoria});
 
     @override
-    State<SubcategoriaScreen> createState() => _SubcategoriaScreenState();
+    ConsumerState<SubcategoriaScreen> createState() => _SubcategoriaScreenState();
 }
 
-class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
+class _SubcategoriaScreenState extends ConsumerState<SubcategoriaScreen>{
     String? seleccionada;
 
     @override
     Widget build(BuildContext context){
-        final lista = SubcategoriaData.data[widget.categoria] ?? [];
+        final categoria = ref.watch(categoriaProvider);
+        final lista = SubcategoriaData.data[categoria] ?? [];
             
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -67,6 +67,8 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                                                 setState((){
                                                     seleccionada = item.nombre;
                                                 });
+
+                                                ref.read(subcategoriaProvider.notifier).state = item.nombre;
                                             },
                                             child: Container(
                                                 margin: const EdgeInsets.only(bottom: 12),

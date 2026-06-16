@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../data/subcategorias_data.dart';
 import '../constants/app_strings.dart';
 import '../theme/app_colors.dart';
-
+import 'package:image_picker/image_picker.dart';
 
 class SubcategoriaScreen extends StatefulWidget {
     final String categoria;
@@ -18,7 +18,44 @@ class SubcategoriaScreen extends StatefulWidget {
 }
 
 class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
+    final TextEditingController comentarioController = TextEditingController();
+    final ImagePicker picker = ImagePicker();
     String? seleccionada;
+    String? imagenPath;
+
+    @override
+    void dispose(){
+        comentarioController.dispose();
+        super.dispose();
+    }
+
+    Future<void> tomarFoto() async{
+        final XFile? photo = await picker.pickImage(
+            source: ImageSource.camera,
+        );
+
+        if (photo != null){
+            setState((){
+                imagenPath = photo.path;
+            });
+        }
+    }
+
+    Color getColorCategoria(String categoria){
+        switch(categoria){
+            case "SALUD":
+                return AppColors.verde;
+            
+            case "INFRAESTRUCTURA":
+                return AppColors.amarillo;
+
+            case "SEGURIDAD":
+                return AppColors.azul;
+            
+            default:
+                return AppColors.azul;
+        }
+    }
 
     @override
     Widget build(BuildContext context){
@@ -45,6 +82,25 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:[
+                        
+                        Container(
+                            width:double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            margin: const EdgeInsets.only(bottom: 20),
+                            decoration: BoxDecoration(
+                                color: getColorCategoria(widget.categoria),
+                                borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Text(
+                                widget.categoria,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                ),
+                            ),
+                        ),
 
                         const Text(
                             AppStrings.selectIncident,
@@ -109,10 +165,42 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
 
                         const SizedBox(height: 10),
 
+                        TextField(
+                            controller: comentarioController,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                                labelText: "Comentarios (opcional)",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                ),
+                            ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        ElevatedButton.icon(
+                            onPressed: tomarFoto,
+                            icon:const Icon(Icons.camera_alt),
+                            label: const Text("Tomar foto (opcional)"),
+                        ),
+
+                        const SizedBox(height: 10),
+
                         SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                                onPressed: seleccionada == null ? null : () {},
+                                onPressed: seleccionada == null 
+                                    ? null 
+                                    : () {
+                                        final data ={
+                                            "categoria": widget.categoria,
+                                            "subcategoria": seleccionada,
+                                            "comentario": comentarioController.text,
+                                            "imagen": imagenPath,
+                                        };
+
+                                        print(data);
+                                    },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.azul,
                                 ),

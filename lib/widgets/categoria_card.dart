@@ -5,6 +5,7 @@ class CategoriaCard extends StatelessWidget {
   final Color color;
   final IconData icono;
   final VoidCallback? onTap;
+  final double verticalPadding;
 
   const CategoriaCard({
     super.key,
@@ -12,17 +13,18 @@ class CategoriaCard extends StatelessWidget {
     required this.color,
     required this.icono,
     this.onTap,
+    this.verticalPadding = 30,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(0),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          vertical: 30,
+        padding: EdgeInsets.symmetric(
+          vertical: verticalPadding,
           horizontal: 16,
         ),
         decoration: BoxDecoration(
@@ -37,13 +39,15 @@ class CategoriaCard extends StatelessWidget {
             ),
 
             const SizedBox(width: 15),
-
-            Text(
-              titulo,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                titulo,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

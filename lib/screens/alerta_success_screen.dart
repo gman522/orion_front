@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+import '../widgets/categoria_card.dart';
 import '../theme/app_colors.dart';
+
 
 class AlertaSuccessScreen extends StatelessWidget{
     final String categoria;
@@ -79,35 +81,40 @@ class AlertaSuccessScreen extends StatelessWidget{
                             ),
                         ),
 
-                        ElevatedButton(
-                            onPressed:(){
+                        const Spacer(),
+
+                        CategoriaCard(
+                            titulo: "Seguimiento",
+                            color: AppColors.azul,
+                            icono: Icons.timeline,
+                            verticalPadding: 15,
+                            onTap: (){
                                 context.go('/seguimiento');
                             },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.azul,
-                            ),
-                            child: const Text("Seguimiento"),
                         ),
 
-                        ElevatedButton(
-                            onPressed:(){
+                        const SizedBox(height: 12),
+
+                        CategoriaCard(
+                            titulo: "Hacer otra alerta",
+                            color: AppColors.verde,
+                            icono: Icons.add_alert,
+                            verticalPadding: 15,
+                            onTap: (){
                                 context.go('/home');
                             },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.verde,
-                            ),
-                            child: const Text("Hacer otra alerta"),
                         ),
 
-                        ElevatedButton.icon(
-                            onPressed:(){
+                        const SizedBox(height: 12),
+
+                        CategoriaCard(
+                            titulo: "Necesitas ayuda mientras esperas? Has click aqui",
+                            color: AppColors.azul,
+                            icono: Icons.smart_toy,
+                            verticalPadding: 15,
+                            onTap: (){
                                 context.go('/chat');
                             },
-                            icon: const Icon(Icons.smart_toy),
-                            label: const Text("Necesitas ayuda mientras esperas? Has click aqui"),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                            ),
                         ),
                     ],
                 ),

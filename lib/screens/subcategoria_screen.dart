@@ -192,14 +192,34 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                                 onPressed: seleccionada == null 
                                     ? null 
                                     : () {
+
+                                        final now = DateTime.now();
+
+                                        final fecha =
+                                            "${now.day.toString().padLeft(2, '0')}/"
+                                            "${now.month.toString().padLeft(2, '0')}/"
+                                            "${now.year}";
+
+                                        final hora =
+                                            "${now.hour.toString().padLeft(2, '0')}:"
+                                            "${now.minute.toString().padLeft(2, '0')}";
+
                                         final data ={
                                             "categoria": widget.categoria,
                                             "subcategoria": seleccionada,
                                             "comentario": comentarioController.text,
                                             "imagen": imagenPath,
+
+                                            //el edificio de las emergencias hasta que se diga lo contrario
+                                            "ubicacion": "edificio C",
+                                            "fecha": fecha,
+                                            "hora": hora,
                                         };
 
-                                        print(data);
+                                        context.go(
+                                            '/alerta-success',
+                                            extra: data,
+                                        );
                                     },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.azul,

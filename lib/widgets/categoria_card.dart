@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CategoriaCard extends StatelessWidget {
-    final String titulo;
+  final String titulo;
   final Color color;
   final IconData icono;
   final VoidCallback? onTap;

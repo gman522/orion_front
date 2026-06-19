@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import '../screens/alerta_success_screen.dart';
 import '../screens/subcategoria_screen.dart';
+import '../screens/seguimiento_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/home_screen.dart';
 
@@ -40,6 +41,11 @@ final GoRouter appRouter = GoRouter(
           hora: data["hora"],
         );
       },
+    ),
+
+    GoRoute(
+      path: '/seguimiento',
+      builder: (context, state) =>const SeguimientoScreen(),
     ),
   ],
 );

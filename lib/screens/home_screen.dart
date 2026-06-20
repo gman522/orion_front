@@ -10,6 +10,8 @@ class HomeScreen extends StatelessWidget {
   
   final CategoriaRepository repo = CategoriaRepository(ApiService());
 
+  HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

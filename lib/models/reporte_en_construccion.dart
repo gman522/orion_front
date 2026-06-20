@@ -13,6 +13,15 @@ class ReporteEnConstruccion{
 
     ReporteEnConstruccion copyWith({
         String? categoria,
-        String?
-    })
+        String? subcategoria,
+        String? comentario,
+        String?imagenPath,
+    }){
+        return ReporteEnConstruccion(
+            categoria: categoria ?? this.categoria,
+            subcategoria: subcategoria ?? this.subcategoria,
+            comentario: comentario ?? this.comentario,
+            imagenPath: imagenPath ?? this.imagenPath,
+        );
+    }
 }

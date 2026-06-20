@@ -197,19 +197,25 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                         ),
 
                         const SizedBox(height: 10),
-
-                        ElevatedButton.icon(
-                            onPressed: tomarFoto,
-                            icon:const Icon(Icons.camera_alt),
-                            label: const Text("Tomar foto (opcional)"),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: ElevatedButton.icon(
-                                onPressed: seleccionarDeGaleria,
-                                icon: const Icon(Icons.photo),
-                                label: const Text("Galeria")
-                            ),
+                        
+                        Row(
+                            children:[
+                                Expanded(
+                                    child: ElevatedButton.icon(
+                                        onPressed: tomarFoto,
+                                        icon:const Icon(Icons.camera_alt),
+                                        label: const Text("Camara (opcional)"),
+                                    ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                    child: ElevatedButton.icon(
+                                        onPressed: seleccionarDeGaleria,
+                                        icon: const Icon(Icons.photo),
+                                        label: const Text("Galeria (Opcional)")
+                                    ),
+                                ),
+                            ],
                         ),
 
                         if(imagenSeleccionada != null)
@@ -229,9 +235,11 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                                 onPressed: seleccionada == null 
                                     ? null 
                                     : () async {
-                                        
+                                        String? imageUrl;
                                         try{
-                                            String? imageUrl;
+                                            if(imagenSeleccionada != null){
+                                                imageUrl = await repo.subirImagen(imagenSeleccionada!);
+                                            }
 
                                             final request = IncidenteRequest(
                                                 categoria:widget.categoria,

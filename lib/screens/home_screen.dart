@@ -1,9 +1,11 @@
 import '../repositories/categoria_repository.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/categoria_card.dart';
+import '../widgets/vista_cargando.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_strings.dart';
 import '../services/api_service.dart';
+import '../widgets/vista_error.dart';
 import '../theme/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -79,20 +81,25 @@ class HomeScreen extends StatelessWidget {
           builder: (context, snapshot){
 
             if(snapshot.connectionState == ConnectionState.waiting){
-              return const Center(child: CircularProgressIndicator());
+              return const VistaCargando();
             }
 
             if (snapshot.hasError){
-              return const Center(
-                child: Text("Error cargando categorias"),
+              return VistaError(
+                mensaje: "Error cargando categorias",
+                onRetry: (){
+                  (context as Element).markNeedsBuild();
+                },
               );
             }
 
             final categorias = snapshot.data ?? [];
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: categorias.map((cat){
+            return ListView.builder(
+              itemCount: categorias.length,
+              itemBuilder: (context, index){
+
+                final cat = categorias[index];
 
                 Color color;
                 IconData icono;
@@ -106,7 +113,8 @@ class HomeScreen extends StatelessWidget {
                   case "INFRAESTRUCTURA":
                     color = AppColors.amarillo;
                     icono = Icons.security;
-
+                    break;
+                  
                   default:
                     color = AppColors.rojo;
                     icono = Icons.security;
@@ -123,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                     },
                   ),
                 );
-              }).toList(),
+              },
             );
           },
         ),

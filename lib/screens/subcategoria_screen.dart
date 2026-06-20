@@ -1,9 +1,15 @@
-import 'package:flutter/material.dart';
+import '../repositories/categoria_repository.dart';
+import 'package:image_picker/image_picker.dart';
+import '../models/incidente_request.dart';
 import 'package:go_router/go_router.dart';
 import '../data/subcategorias_data.dart';
+import 'package:flutter/material.dart';
 import '../constants/app_strings.dart';
+import '../services/api_service.dart';
 import '../theme/app_colors.dart';
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+
 
 class SubcategoriaScreen extends StatefulWidget {
     final String categoria;
@@ -19,9 +25,11 @@ class SubcategoriaScreen extends StatefulWidget {
 
 class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
     final TextEditingController comentarioController = TextEditingController();
+    final repo = CategoriaRepository(ApiService());
     final ImagePicker picker = ImagePicker();
     String? seleccionada;
     String? imagenPath;
+    File? imagenSeleccionada;
 
     @override
     void dispose(){
@@ -30,13 +38,25 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
     }
 
     Future<void> tomarFoto() async{
-        final XFile? photo = await picker.pickImage(
+        final pickedFile = await picker.pickImage(
             source: ImageSource.camera,
         );
 
-        if (photo != null){
+        if (pickedFile != null){
             setState((){
-                imagenPath = photo.path;
+                imagenSeleccionada = File(pickedFile.path);
+            });
+        }
+    }
+
+    Future<void> seleccionarDeGaleria() async{
+        final pickedFile = await picker.pickImage(
+            source: ImageSource.gallery,
+        );
+
+        if(pickedFile != null){
+            setState((){
+                imagenSeleccionada = File(pickedFile.path);
             });
         }
     }
@@ -183,6 +203,23 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                             icon:const Icon(Icons.camera_alt),
                             label: const Text("Tomar foto (opcional)"),
                         ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                            child: ElevatedButton.icon(
+                                onPressed: seleccionarDeGaleria,
+                                icon: const Icon(Icons.photo),
+                                label: const Text("Galeria")
+                            ),
+                        ),
+
+                        if(imagenSeleccionada != null)
+                            Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Image.file(
+                                    imagenSeleccionada!,
+                                    height: 150,
+                                ),
+                            ),
 
                         const SizedBox(height: 10),
 
@@ -191,35 +228,38 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                             child: ElevatedButton(
                                 onPressed: seleccionada == null 
                                     ? null 
-                                    : () {
+                                    : () async {
+                                        
+                                        try{
+                                            String? imageUrl;
 
-                                        final now = DateTime.now();
+                                            final request = IncidenteRequest(
+                                                categoria:widget.categoria,
+                                                subcategoria: seleccionada!,
+                                                comentario: comentarioController.text,
+                                                imagen: imageUrl,
+                                            );
 
-                                        final fecha =
-                                            "${now.day.toString().padLeft(2, '0')}/"
-                                            "${now.month.toString().padLeft(2, '0')}/"
-                                            "${now.year}";
+                                            await repo.crearIncidente(request);
 
-                                        final hora =
-                                            "${now.hour.toString().padLeft(2, '0')}:"
-                                            "${now.minute.toString().padLeft(2, '0')}";
+                                            if(!context.mounted) return;
 
-                                        final data ={
-                                            "categoria": widget.categoria,
-                                            "subcategoria": seleccionada,
-                                            "comentario": comentarioController.text,
-                                            "imagen": imagenPath,
+                                            context.go(
+                                                '/alerta-succes',
+                                                extra:{
+                                                    "categoria": widget.categoria,
+                                                    "subcategoria": seleccionada,
+                                                    "comentario": comentarioController.text,
+                                                    "imagen": imageUrl,
+                                                    "ubicacion": "edificio C",//stos mecanicos
+                                                    "fecha": "20/06/2026",
+                                                    "hora": "12:00",
+                                                },
+                                            );
 
-                                            //el edificio de las emergencias hasta que se diga lo contrario
-                                            "ubicacion": "edificio C",
-                                            "fecha": fecha,
-                                            "hora": hora,
-                                        };
-
-                                        context.go(
-                                            '/alerta-success',
-                                            extra: data,
-                                        );
+                                        } catch(e){
+                                            print("Error POST incidente: $e");
+                                        }
                                     },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.azul,

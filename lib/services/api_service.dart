@@ -25,4 +25,25 @@ class ApiService{
             throw Exception("Error Post: $e");
         }
     }
+
+    Future<Response> getPresignedUrl(String fileName) async{
+        return await _dio.get(
+            ApiConfig.uploadUrlEndpoint,
+            queryParameters:{
+                "fileName": fileName,
+            },
+        );
+    }
+
+    Future<void> uploadFileToUrl(String url, List<int> bytes) async{
+        await _dio.put(
+            url,
+            data: bytes,
+            options: Options(
+                headers:{
+                    "Content-Type": "image/jpeg",
+                },
+            ),
+        );
+    }
 }

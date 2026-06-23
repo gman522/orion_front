@@ -1,16 +1,10 @@
-import '../repositories/categoria_repository.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/categoria_card.dart';
-import '../widgets/vista_cargando.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_strings.dart';
-import '../services/api_service.dart';
-import '../widgets/vista_error.dart';
 import '../theme/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  
-  final CategoriaRepository repo = CategoriaRepository(ApiService());
 
   HomeScreen({super.key});
 
@@ -76,64 +70,40 @@ class HomeScreen extends StatelessWidget {
 
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: FutureBuilder(
-          future: repo.obtenerCategorias(),
-          builder: (context, snapshot){
-
-            if(snapshot.connectionState == ConnectionState.waiting){
-              return const VistaCargando();
-            }
-
-            if (snapshot.hasError){
-              return VistaError(
-                mensaje: "Error cargando categorias",
-                onRetry: (){
-                  (context as Element).markNeedsBuild();
-                },
-              );
-            }
-
-            final categorias = snapshot.data ?? [];
-
-            return ListView.builder(
-              itemCount: categorias.length,
-              itemBuilder: (context, index){
-
-                final cat = categorias[index];
-
-                Color color;
-                IconData icono;
-
-                switch(cat.nombre.toUpperCase()){
-                  case "SALUD":
-                    color = AppColors.verde;
-                    icono = Icons.favorite;
-                    break;
-
-                  case "INFRAESTRUCTURA":
-                    color = AppColors.amarillo;
-                    icono = Icons.security;
-                    break;
-                  
-                  default:
-                    color = AppColors.rojo;
-                    icono = Icons.security;
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: CategoriaCard(
-                    titulo: cat.nombre,
-                    color: color,
-                    icono: icono,
-                    onTap: (){
-                      context.go('/subcategoria/${cat.nombre}');
-                    },
-                  ),
-                );
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[
+            CategoriaCard(
+              titulo: AppStrings.health,
+              color: AppColors.verde,
+              icono: Icons.favorite,
+              onTap:(){
+                context.go('/subcategoria/SALUD');
               },
-            );
-          },
+            ),
+
+            const SizedBox(height: 20),
+
+            CategoriaCard(
+              titulo: AppStrings.infraestructure,
+              color: AppColors.amarillo,
+              icono: Icons.build,
+              onTap:(){
+                context.go('/subcategoria/INFRAESTRUCTURA');
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            CategoriaCard(
+              titulo: AppStrings.security,
+              color: AppColors.rojo,
+              icono: Icons.build,
+              onTap:(){
+                context.go('/subcategoria/SEGURIDAD');
+              },
+            ),
+          ],
         ),
       ),
     );

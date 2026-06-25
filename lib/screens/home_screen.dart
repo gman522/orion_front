@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.verde,
               icono: Icons.favorite,
               onTap:(){
-                context.go('/subcategoria/SALUD');
+                context.go('/subcategoria/1');
               },
             ),
 
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.amarillo,
               icono: Icons.build,
               onTap:(){
-                context.go('/subcategoria/INFRAESTRUCTURA');
+                context.go('/subcategoria/2');
               },
             ),
 
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.rojo,
               icono: Icons.build,
               onTap:(){
-                context.go('/subcategoria/SEGURIDAD');
+                context.go('/subcategoria/3');
               },
             ),
           ],

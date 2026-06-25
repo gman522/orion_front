@@ -18,12 +18,12 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-        path: '/subcategoria/:categoria',
+        path: '/subcategoria/:id',
         builder: (context, state){
-            final categoria = state.pathParameters['categoria']!;
+            final id = int.parse(state.pathParameters['id']!);
 
             return SubcategoriaScreen(
-                categoria: categoria,
+                categoriaId: id,
             );
         },
     ),

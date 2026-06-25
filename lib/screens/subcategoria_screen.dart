@@ -2,21 +2,21 @@ import '../repositories/categoria_repository.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/incidente_request.dart';
 import 'package:go_router/go_router.dart';
-import '../data/subcategorias_data.dart';
 import 'package:flutter/material.dart';
 import '../constants/app_strings.dart';
 import '../services/api_service.dart';
+import '../models/subcategoria.dart';
 import '../theme/app_colors.dart';
 import 'dart:io';
 
 
 
 class SubcategoriaScreen extends StatefulWidget {
-    final String categoria;
+    final int categoriaId;
 
     const SubcategoriaScreen({
         super.key,
-        required this.categoria,
+        required this.categoriaId,
     });
 
     @override
@@ -24,10 +24,13 @@ class SubcategoriaScreen extends StatefulWidget {
 }
 
 class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
+    bool isLoading = false;
     final TextEditingController comentarioController = TextEditingController();
     final repo = CategoriaRepository(ApiService());
     final ImagePicker picker = ImagePicker();
-    String? seleccionada;
+    late Future<List<Subcategoria>> futureSubcategorias;
+    int? seleccionada;
+    Subcategoria? subcategoriaSeleccionada;
     String? imagenPath;
     File? imagenSeleccionada;
 
@@ -61,26 +64,44 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
         }
     }
 
-    Color getColorCategoria(String categoria){
-        switch(categoria){
+    @override
+    void initState(){
+        super.initState();
+        futureSubcategorias =
+            repo.obtenerSubcategorias(widget.categoriaId);
+    }
+
+    Color getColorCategoria(String categoria) {
+        switch (categoria) {
             case "SALUD":
-                return AppColors.verde;
-            
+            return AppColors.verde;
+
             case "INFRAESTRUCTURA":
-                return AppColors.amarillo;
+            return AppColors.amarillo;
 
             case "SEGURIDAD":
-                return AppColors.azul;
-            
+            return AppColors.azul;
+
             default:
-                return AppColors.azul;
+            return AppColors.azul;
+        }
+    }
+
+    String get nombreCategoria{
+        switch (widget.categoriaId){
+            case 1:
+                return "SALUD";
+            case 2:
+                return "INFRAESTRUCTURA";
+            case 3:
+                return "SEGURIDAD";
+            default:
+                return "CATEGORIA";
         }
     }
 
     @override
     Widget build(BuildContext context){
-        final lista = SubcategoriaData.data[widget.categoria] ?? [];
-    
         return Scaffold(
             backgroundColor: Colors.white,
 
@@ -94,7 +115,7 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                         context.go('/home');
                     },
                 ),
-                title: Text(widget.categoria),
+                title: Text(nombreCategoria),
             ),
 
             body: Padding(
@@ -108,11 +129,11 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                             padding: const EdgeInsets.all(16),
                             margin: const EdgeInsets.only(bottom: 20),
                             decoration: BoxDecoration(
-                                color: getColorCategoria(widget.categoria),
+                                color: getColorCategoria(nombreCategoria.toUpperCase()),
                                 borderRadius: BorderRadius.circular(15),
                             ),
                             child: Text(
-                                widget.categoria,
+                                nombreCategoria,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: Colors.white,
@@ -133,51 +154,40 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                         const SizedBox(height: 20),
 
                         Expanded(
-                            child: ListView.builder(
-                                itemCount: lista.length,
-                                itemBuilder: (context, index){
-                                    final item = lista[index];
-                                    final isSelected = seleccionada == item.nombre;
+                            child: FutureBuilder<List<Subcategoria>>(
+                                future: futureSubcategorias,
+                                builder: (context, snapshot){
 
-                                    return GestureDetector(
-                                        onTap:(){
-                                            setState((){
-                                                seleccionada = item.nombre;
-                                            });
+                                    if(snapshot.connectionState == ConnectionState.waiting){
+                                        return const Center(child: CircularProgressIndicator());
+                                    }
+
+                                    if(snapshot.hasError){
+                                        return Center(child: Text("Error: ${snapshot.error}"));
+                                    }
+
+                                    final lista = snapshot.data ?? [];
+
+                                    return ListView.builder(
+                                        itemCount: lista.length,
+                                        itemBuilder: (context, index){
+                                            final item = lista[index];
+                                            final isSelected = seleccionada == item.id;
+
+                                            return ListTile(
+                                                tileColor: isSelected ? Colors.grey.shade300 : null,
+                                                title: Text(item.nombre),
+                                                trailing: isSelected
+                                                    ? const Icon(Icons.check_circle, color: Colors.blue)
+                                                    : null,
+                                                onTap: (){
+                                                    setState((){
+                                                        seleccionada = item.id;
+                                                        subcategoriaSeleccionada = item;
+                                                    });
+                                                },
+                                            );
                                         },
-                                        child: Container(
-                                            margin: const EdgeInsets.only(bottom: 12),
-                                            padding: const EdgeInsets.all(16),
-                                            decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? AppColors.azul
-                                                    : Colors.grey.shade200,
-                                                borderRadius: BorderRadius.circular(15),
-                                            ),
-                                            child: Row(
-                                                children:[
-
-                                                    Icon(
-                                                        item.icono,
-                                                        color: isSelected
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                    ),
-
-                                                    const SizedBox(width: 15),
-
-                                                    Text(
-                                                        item.nombre,
-                                                        style: TextStyle(
-                                                            color: isSelected
-                                                                ? Colors.white
-                                                                : Colors.black,
-                                                            fontWeight: FontWeight.bold,
-                                                        ),
-                                                    ),
-                                                ],
-                                            ),
-                                        ),
                                     );
                                 },
                             ),
@@ -232,20 +242,17 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                         SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                                onPressed: seleccionada == null 
+                                onPressed: seleccionada == null || isLoading
                                     ? null 
                                     : () async {
-                                        String? imageUrl;
                                         try{
-                                            if(imagenSeleccionada != null){
-                                                imageUrl = await repo.subirImagen(imagenSeleccionada!);
-                                            }
+                                            setState(() => isLoading = true);
 
                                             final request = IncidenteRequest(
-                                                categoria:widget.categoria,
-                                                subcategoria: seleccionada!,
-                                                comentario: comentarioController.text,
-                                                imagen: imageUrl,
+                                                subcategoriaId: seleccionada!,
+                                                descripcion: comentarioController.text.trim().isEmpty
+                                                    ? null
+                                                    : comentarioController.text.trim(),
                                             );
 
                                             await repo.crearIncidente(request);
@@ -253,20 +260,26 @@ class _SubcategoriaScreenState extends State<SubcategoriaScreen>{
                                             if(!context.mounted) return;
 
                                             context.go(
-                                                '/alerta-succes',
+                                                '/alerta-success',
                                                 extra:{
-                                                    "categoria": widget.categoria,
-                                                    "subcategoria": seleccionada,
-                                                    "comentario": comentarioController.text,
-                                                    "imagen": imageUrl,
-                                                    "ubicacion": "edificio C",//stos mecanicos
-                                                    "fecha": "20/06/2026",
-                                                    "hora": "12:00",
+                                                    "categoria": widget.categoriaId == 1
+                                                        ? "Salud"
+                                                        : widget.categoriaId == 2
+                                                            ? "Infraestructura"
+                                                            : "Seguridad",
+                                                    "subcategoria": subcategoriaSeleccionada?.nombre ?? "N/A",
+                                                    "ubicacion": "casino",
+                                                    "fecha": DateTime.now().toString(),
+                                                    "hora": TimeOfDay.now().format(context),
                                                 },
                                             );
 
                                         } catch(e){
                                             print("Error POST incidente: $e");
+                                        }finally{
+                                            if(mounted){
+                                                setState(() => isLoading = false);
+                                            }
                                         }
                                     },
                                 style: ElevatedButton.styleFrom(

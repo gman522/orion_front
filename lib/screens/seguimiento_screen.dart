@@ -35,7 +35,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen>{
         },
     ];
 
-    int estadoActual = 0;
+    int estadoActual = 1;
 
     Widget _buildCircle(EstadoPaso estado){
         switch (estado){
@@ -155,7 +155,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen>{
                 leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed:(){
-                        context.pop();
+                        context.go('/home');
                     },
                 ),
             ),
@@ -174,7 +174,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen>{
                                 borderRadius: BorderRadius.circular(15),
                             ),
                             child: const Text(
-                                "codigo de alerta: no generado :v",
+                                "codigo de alerta: AL-4821-XPR",
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -217,20 +217,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen>{
                             }),
                         ),
                         
-                        const SizedBox(height: 20),
-
-                        ElevatedButton(
-                            onPressed:(){
-                                setState((){
-                                    if(estadoActual < 3){
-                                        estadoActual++;
-                                    }else{
-                                        estadoActual = 0;
-                                    }
-                                });
-                            },
-                            child: const Text("avanzar estado (pa probar)"),
-                        ),
+                    //aqui descanza en mi memoria el boton para avanzar estado
                     ],
                 ),
             ),

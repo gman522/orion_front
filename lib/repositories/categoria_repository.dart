@@ -1,5 +1,7 @@
 import '../models/incidente_request.dart';
+import '../data/mock_subcategorias.dart';
 import '../services/api_service.dart';
+import '../models/subcategoria.dart';
 import '../config/api_config.dart';
 import '../models/categoria.dart';
 import 'dart:io';
@@ -10,21 +12,16 @@ class CategoriaRepository{
     CategoriaRepository(this.apiService);
 
     Future<List<Categoria>> obtenerCategorias() async{
-        final response =
-            await apiService.get(ApiConfig.categoriasEndpoint);
-
-        final List data = response.data;
-
-        return data.map((e) => Categoria.fromJson(e)).toList();
+        return[
+            Categoria(id: 1, nombre: "Salud"),
+            Categoria(id: 2, nombre: "Infraestructura"),
+            Categoria(id: 3, nombre: "Seguridad"),
+        ];
     }
 
-    Future<dynamic> crearIncidente(IncidenteRequest request) async{
-        final response = await apiService.post(
-            ApiConfig.incidentesEndpoint,
-            request.toJson(),
-        );
-
-        return response.data;
+    Future<void> crearIncidente(IncidenteRequest request) async{
+        await Future.delayed(const Duration(seconds: 1));
+        print("INCIDENTE MOCK: ${request.toJson()}");
     }
 
     Future<String> subirImagen(File file) async{
@@ -38,5 +35,9 @@ class CategoriaRepository{
         await apiService.uploadFileToUrl(uploadUrl, await file.readAsBytes());
 
         return publicUrl;
+    }
+
+    Future<List<Subcategoria>> obtenerSubcategorias(int categoriaId) async{
+        return MockSubcategorias.porCategoria(categoriaId);
     }
 }

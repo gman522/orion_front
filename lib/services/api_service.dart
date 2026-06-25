@@ -7,14 +7,23 @@ class ApiService{
             baseUrl: ApiConfig.baseUrl,
             connectTimeout: const Duration(seconds: 10),
             receiveTimeout: const Duration(seconds: 10),
+
+            headers:{
+                'ngrok-skip-browser-warning': 'true',
+                'Content-Type': 'application/json',
+            },
         ),
     );
 
     Future<Response> get(String path) async{
         try{
+            final fullUrl = "${ApiConfig.baseUrl}$path";
+            print("GET -> $fullUrl");
+
             return await _dio.get(path);
         } catch(e){
-            throw Exception("Error GET: $e");
+            print("Error GET: $e");
+            rethrow;
         }
     }
 

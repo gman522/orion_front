@@ -1,28 +1,19 @@
-import 'package:flutter/material.dart';
-
 class Subcategoria{
+    final int id;
     final String nombre;
-    final IconData icono;
+    final int categoriaId;
 
     const Subcategoria({
+        required this.id,
         required this.nombre,
-        required this.icono,
+        required this.categoriaId,
     });
-}
 
-class SubcategoriaData{
-    static const Map<String, List<Subcategoria>> data={
-        "SALUD":[
-            Subcategoria(nombre: "Desmayo", icono: Icons.personal_injury),
-            Subcategoria(nombre: "Accidente", icono: Icons.health_and_safety),
-        ],
-        "INFRAESTRUCTURA":[
-            Subcategoria(nombre: "Caida de estructura", icono: Icons.build),
-            Subcategoria(nombre: "Falla electrica", icono: Icons.electrical_services),
-        ],
-        "SEGURIDAD":[
-            Subcategoria(nombre: "Robo", icono: Icons.security),
-            Subcategoria(nombre: "Emergencia violenta", icono: Icons.warning),
-        ],
-    };
+    factory Subcategoria.fromJson(Map<String, dynamic> json){
+        return Subcategoria(
+            id: json['id'],
+            nombre: json['nombre'],
+            categoriaId: json['categoriaId'],
+        );
+    }
 }

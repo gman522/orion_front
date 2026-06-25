@@ -1,5 +1,5 @@
 class Categoria{
-    final String id;
+    final int id;
     final String nombre;
 
     Categoria({
